@@ -3,7 +3,7 @@ package ethereum
 import (
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
 	"github.com/trustwallet/blockatlas/platform/ethereum/blockbook"
-	"github.com/trustwallet/blockatlas/platform/ethereum/collection"
+	"github.com/trustwallet/blockatlas/platform/ethereum/opensea"
 	"github.com/trustwallet/blockatlas/platform/ethereum/trustray"
 	"github.com/trustwallet/golibs/coin"
 )
@@ -12,7 +12,7 @@ type Platform struct {
 	CoinIndex   uint
 	RpcURL      string
 	client      EthereumClient
-	collectible collection.Client
+	collectible CollectibleClient
 }
 
 func Init(coinType uint, api, rpc string) *Platform {
@@ -33,8 +33,7 @@ func InitWithBlockbook(coinType uint, blockbookApi, rpc string) *Platform {
 
 func InitWithCollection(coinType uint, rpc, blockbookApi, collectionApi, collectionKey string) *Platform {
 	platform := InitWithBlockbook(coinType, blockbookApi, rpc)
-	platform.collectible = collection.Client{Request: blockatlas.InitClient(collectionApi)}
-	platform.collectible.Headers["X-API-KEY"] = collectionKey
+	platform.collectible = opensea.InitClient(collectionApi, collectionKey)
 	return platform
 }
 

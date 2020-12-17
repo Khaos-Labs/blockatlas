@@ -11,3 +11,7 @@ func (p *Platform) GetTxsByAddress(address string) (blockatlas.TxPage, error) {
 func (p *Platform) GetTokenTxsByAddress(address string, token string) (blockatlas.TxPage, error) {
 	return p.client.GetTokenTxs(address, token, p.CoinIndex)
 }
+
+func (p *Platform) GetTokenListByAddress(address string) (blockatlas.TokenPage, error) {
+	return p.client.GetTokenList(address, p.CoinIndex)
+}

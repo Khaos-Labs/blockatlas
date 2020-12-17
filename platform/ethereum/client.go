@@ -12,14 +12,7 @@ type EthereumClient interface {
 	GetBlockByNumber(num int64, coinIndex uint) (*blockatlas.Block, error)
 }
 
-func (p *Platform) GetTokenListByAddress(address string) (blockatlas.TokenPage, error) {
-	return p.client.GetTokenList(address, p.CoinIndex)
-}
-
-func (p *Platform) CurrentBlockNumber() (int64, error) {
-	return p.client.GetCurrentBlockNumber()
-}
-
-func (p *Platform) GetBlockByNumber(num int64) (*blockatlas.Block, error) {
-	return p.client.GetBlockByNumber(num, p.CoinIndex)
+type CollectibleClient interface {
+	GetCollections(owner string, coinIndex uint) (blockatlas.CollectionPage, error)
+	GetCollectibles(owner, collectionID string, coinIndex uint) (blockatlas.CollectiblePage, error)
 }

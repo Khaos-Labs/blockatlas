@@ -1,4 +1,4 @@
-package collection
+package opensea
 
 import (
 	"net/url"
@@ -11,7 +11,13 @@ type Client struct {
 	blockatlas.Request
 }
 
-func (c Client) GetCollections(owner string) (page []Collection, err error) {
+func InitClient(api string, apiKey string) *Client {
+	c := Client{blockatlas.InitClient(api)}
+	c.Headers["X-API-KEY"] = apiKey
+	return &c
+}
+
+func (c Client) getCollections(owner string) (page []Collection, err error) {
 	query := url.Values{
 		"asset_owner": {owner},
 		"limit":       {"1000"},
@@ -20,10 +26,10 @@ func (c Client) GetCollections(owner string) (page []Collection, err error) {
 	return
 }
 
-func (c Client) GetCollectibles(owner string, collectibleID string) ([]Collectible, error) {
+func (c Client) getCollectibles(owner string, collectionID string) ([]Collectible, error) {
 	query := url.Values{
 		"owner":      {owner},
-		"collection": {collectibleID},
+		"collection": {collectionID},
 		"limit":      {strconv.Itoa(300)},
 	}
 
