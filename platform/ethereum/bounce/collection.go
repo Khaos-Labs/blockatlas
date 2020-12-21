@@ -1,26 +1,17 @@
 package bounce
 
 import (
-	"errors"
 	"strconv"
 
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
-	"github.com/trustwallet/golibs/coin"
 )
 
 var (
-	chainIdMap = map[uint]int{
-		coin.ETH: 1,
-		coin.BSC: 56,
-	}
+	bscChainId = 56
 )
 
 func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.CollectionPage, error) {
-	chainId, ok := chainIdMap[coinIndex]
-	if !ok {
-		return nil, errors.New("not supported coin / chain id")
-	}
-	collections, err := c.getCollections(owner, chainId)
+	collections, err := c.getCollections(owner, bscChainId)
 	if err != nil {
 		return nil, err
 	}
@@ -29,11 +20,7 @@ func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.Collec
 }
 
 func (c *Client) GetCollectibles(owner, collectionID string, coinIndex uint) (blockatlas.CollectiblePage, error) {
-	chainId, ok := chainIdMap[coinIndex]
-	if !ok {
-		return nil, errors.New("not supported coin / chain id")
-	}
-	collectibles, err := c.getCollectibles(owner, collectionID, chainId)
+	collectibles, err := c.getCollectibles(owner, collectionID, bscChainId)
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +32,10 @@ func (c *Client) NormalizeCollections(collections []Collection, coinIndex uint, 
 	for _, cl := range collections {
 		total, err := strconv.Atoi(cl.Balance)
 		if err != nil {
+			continue
+		}
+		// skip empty info token
+		if len(cl.TokenURI) == 0 {
 			continue
 		}
 		info, err := c.fetchTokenURI(cl.TokenURI)
