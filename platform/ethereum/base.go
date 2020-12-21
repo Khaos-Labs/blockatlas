@@ -3,6 +3,7 @@ package ethereum
 import (
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
 	"github.com/trustwallet/blockatlas/platform/ethereum/blockbook"
+	"github.com/trustwallet/blockatlas/platform/ethereum/bounce"
 	"github.com/trustwallet/blockatlas/platform/ethereum/opensea"
 	"github.com/trustwallet/blockatlas/platform/ethereum/trustray"
 	"github.com/trustwallet/golibs/coin"
@@ -31,9 +32,15 @@ func InitWithBlockbook(coinType uint, blockbookApi, rpc string) *Platform {
 	}
 }
 
-func InitWithCollection(coinType uint, rpc, blockbookApi, collectionApi, collectionKey string) *Platform {
+func InitWithOpenSea(coinType uint, rpc, blockbookApi, collectionApi, collectionKey string) *Platform {
 	platform := InitWithBlockbook(coinType, blockbookApi, rpc)
 	platform.collectible = opensea.InitClient(collectionApi, collectionKey)
+	return platform
+}
+
+func InitWithBounce(coinType uint, rpc, blockbookApi, collectionApi string) *Platform {
+	platform := InitWithBlockbook(coinType, blockbookApi, rpc)
+	platform.collectible = bounce.InitClient(collectionApi)
 	return platform
 }
 

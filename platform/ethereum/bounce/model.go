@@ -47,18 +47,22 @@ type CollectionInfo struct {
 	Type       string     `json:"type"`
 	Properties Properties `json:"properties"`
 }
+
 type CollectionName struct {
 	Type        string `json:"type"`
 	Description string `json:"description"`
 }
+
 type CollectionDescription struct {
 	Type        string `json:"type"`
 	Description string `json:"description"`
 }
+
 type CollectionImage struct {
 	Type        string `json:"type"`
 	Description string `json:"description"`
 }
+
 type Properties struct {
 	Name        CollectionName        `json:"name"`
 	Description CollectionDescription `json:"description"`

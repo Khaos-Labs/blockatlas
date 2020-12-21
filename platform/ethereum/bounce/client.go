@@ -11,6 +11,11 @@ type Client struct {
 	blockatlas.Request
 }
 
+func InitClient(url string) *Client {
+	c := Client{blockatlas.InitClient(url)}
+	return &c
+}
+
 func (c Client) getCollections(owner string, chainId int) ([]Collection, error) {
 	query := url.Values{
 		"address":  {owner},
@@ -32,7 +37,7 @@ func (c Client) getCollectibles(owner string, collectionID string, chainId int) 
 	}
 
 	var resp CollectibleResponse
-	err := c.Get(&resp, "api/v1/assets", query)
+	err := c.Get(&resp, "/erc721", query)
 	if err != nil {
 		return nil, err
 	}

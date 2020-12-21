@@ -11,7 +11,7 @@ var (
 )
 
 func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.CollectionPage, error) {
-	collections, err := c.getCollections(owner)
+	collections, err := c.GetCollectionsByOwner(owner)
 	if err != nil {
 		return nil, err
 	}
@@ -19,8 +19,8 @@ func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.Collec
 
 }
 
-func (c *Client) GetCollectibles(owner, collectionID string, coinIndex uint) (blockatlas.CollectiblePage, error) {
-	items, err := c.getCollectibles(owner, collectionID)
+func (c *Client) GetCollectibles(owner, collectionId string, coinIndex uint) (blockatlas.CollectiblePage, error) {
+	items, err := c.GetCollectiblesByCollectionId(owner, collectionId)
 	if err != nil {
 		return nil, err
 	}

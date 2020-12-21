@@ -1,6 +1,7 @@
 package bounce
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
@@ -15,7 +16,11 @@ var (
 )
 
 func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.CollectionPage, error) {
-	collections, err := c.getCollections(owner, chainIdMap[coinIndex])
+	chainId, ok := chainIdMap[coinIndex]
+	if !ok {
+		return nil, errors.New("not supported coin / chain id")
+	}
+	collections, err := c.getCollections(owner, chainId)
 	if err != nil {
 		return nil, err
 	}
@@ -24,34 +29,38 @@ func (c *Client) GetCollections(owner string, coinIndex uint) (blockatlas.Collec
 }
 
 func (c *Client) GetCollectibles(owner, collectionID string, coinIndex uint) (blockatlas.CollectiblePage, error) {
-	collectibles, err := c.getCollectibles(owner, collectionID, chainIdMap[coinIndex])
+	chainId, ok := chainIdMap[coinIndex]
+	if !ok {
+		return nil, errors.New("not supported coin / chain id")
+	}
+	collectibles, err := c.getCollectibles(owner, collectionID, chainId)
 	if err != nil {
 		return nil, err
 	}
 	return c.NormalizeCollectibles(collectibles, coinIndex)
 }
 
-func (ct *Client) NormalizeCollections(collections []Collection, coinIndex uint, owner string) (blockatlas.CollectionPage, error) {
+func (c *Client) NormalizeCollections(collections []Collection, coinIndex uint, owner string) (blockatlas.CollectionPage, error) {
 	page := make(blockatlas.CollectionPage, len(collections))
-	for _, c := range collections {
-		total, err := strconv.Atoi(c.Balance)
+	for _, cl := range collections {
+		total, err := strconv.Atoi(cl.Balance)
 		if err != nil {
 			continue
 		}
-		info, err := ct.fetchTokenURI(c.TokenURI)
+		info, err := c.fetchTokenURI(cl.TokenURI)
 		if err != nil {
 			return nil, err
 		}
 		page = append(page, blockatlas.Collection{
-			Id:           c.ContractAddr,
+			Id:           cl.ContractAddr,
 			Name:         info.Properties.Name.Description,
 			ImageUrl:     info.Properties.Image.Description,
 			Description:  info.Properties.Description.Description,
-			ExternalLink: c.TokenURI,
+			ExternalLink: cl.TokenURI,
 			Total:        total,
 			Address:      owner,
 			Coin:         coinIndex,
-			Type:         "ERC" + c.TokenType,
+			Type:         "ERC" + cl.TokenType,
 		})
 	}
 	return page, nil
