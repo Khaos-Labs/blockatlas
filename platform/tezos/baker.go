@@ -15,7 +15,7 @@ type BakerClient struct {
 
 func (c *BakerClient) GetBakers() (validators blockatlas.StakeValidators, err error) {
 	var bakers []Baker
-	err = c.Get(&bakers, "/v2/bakers", nil)
+	err = c.Get(&bakers, "v2/bakers", nil)
 	if err != nil {
 		return
 	}
