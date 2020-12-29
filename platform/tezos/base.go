@@ -6,14 +6,16 @@ import (
 )
 
 type Platform struct {
-	client    Client
-	rpcClient RpcClient
+	client      Client
+	rpcClient   RpcClient
+	bakerClient BakerClient
 }
 
-func Init(api, rpc string) *Platform {
+func Init(api, rpc, baker string) *Platform {
 	p := &Platform{
-		client:    Client{blockatlas.InitClient(api)},
-		rpcClient: RpcClient{blockatlas.InitClient(rpc)},
+		client:      Client{blockatlas.InitClient(api)},
+		rpcClient:   RpcClient{blockatlas.InitClient(rpc)},
+		bakerClient: BakerClient{blockatlas.InitClient(baker)},
 	}
 	p.client.SetTimeout(35)
 	return p
