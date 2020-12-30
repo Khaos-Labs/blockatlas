@@ -18,7 +18,6 @@ require (
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
-	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect
 	github.com/imroc/req v0.3.0
 	github.com/mitchellh/mapstructure v1.4.0
@@ -33,8 +32,8 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
-	github.com/trustwallet/golibs v0.0.26
-	github.com/trustwallet/golibs/network v0.0.0-20201216013232-f564db1c6ecd
+	github.com/trustwallet/golibs v0.0.25-0.20201230040953-c9ac628e6bf9
+	github.com/trustwallet/golibs/network v0.0.0-20201223054649-fe884ea32384
 	go.uber.org/atomic v1.7.0
 	golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392
 	golang.org/x/net v0.0.0-20201216054612-986b41b23924 // indirect
