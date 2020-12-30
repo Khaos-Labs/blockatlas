@@ -6,7 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 	"github.com/trustwallet/blockatlas/db"
-	"github.com/trustwallet/blockatlas/pkg/address"
+	"github.com/trustwallet/golibs/asset"
 )
 
 const (
@@ -45,8 +45,8 @@ func RunNotifier(database *db.Instance, delivery amqp.Delivery) {
 
 	notifications := make([]TransactionNotification, 0)
 	for _, sub := range subscriptionsDataList {
-		ua, _, ok := address.UnprefixedAddress(sub.Address.Address)
-		if !ok {
+		_, ua, err := asset.ParseID(sub.Address.Address)
+		if err != nil {
 			continue
 		}
 		notificationsForAddress := buildNotificationsByAddress(ua, txs)

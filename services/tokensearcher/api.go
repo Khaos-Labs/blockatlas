@@ -10,8 +10,8 @@ import (
 	"github.com/trustwallet/blockatlas/db"
 	"github.com/trustwallet/blockatlas/db/models"
 	"github.com/trustwallet/blockatlas/mq"
-	"github.com/trustwallet/blockatlas/pkg/address"
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
+	"github.com/trustwallet/golibs/asset"
 )
 
 type (
@@ -97,28 +97,8 @@ func getUnsubscribedAddresses(subscribed []string, all []string) AddressesByCoin
 	for _, a := range all {
 		_, ok := subscribedMap[a]
 		if !ok {
-			ua, coinID, ok := address.UnprefixedAddress(a)
-			if !ok {
-				continue
-			}
-			currentAddresses := addressesByCoin[coinID]
-			addressesByCoin[coinID] = append(currentAddresses, ua)
-		}
-	}
-	return addressesByCoin
-}
-
-func getAddressesToRegisterByCoin(assetsByAddresses AssetsByAddress, addresses []string) AddressesByCoin {
-	addressesByCoin := make(AddressesByCoin)
-	addressesFromRequestMap := make(map[string]bool)
-	for _, a := range addresses {
-		addressesFromRequestMap[a] = true
-	}
-	for _, a := range addresses {
-		_, ok := assetsByAddresses[a]
-		if !ok {
-			ua, coinID, ok := address.UnprefixedAddress(a)
-			if !ok {
+			coinID, ua, err := asset.ParseID(a)
+			if err != nil {
 				continue
 			}
 			currentAddresses := addressesByCoin[coinID]

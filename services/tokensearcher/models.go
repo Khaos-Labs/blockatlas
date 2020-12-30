@@ -1,11 +1,11 @@
 package tokensearcher
 
 import (
+	"sync"
+
 	"github.com/trustwallet/blockatlas/db/models"
-	"github.com/trustwallet/blockatlas/pkg/address"
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
 	"github.com/trustwallet/golibs/asset"
-	"sync"
 )
 
 type NodesResponse struct {
@@ -16,7 +16,7 @@ type NodesResponse struct {
 func (nr *NodesResponse) UpdateAssetsByAddress(tokens blockatlas.TokenPage, coin int, a string) {
 	nr.Lock()
 	for _, t := range tokens {
-		key := address.PrefixedAddress(uint(coin), a)
+		key := asset.BuildID(uint(coin), a)
 		r := nr.AssetsByAddress[key]
 		nr.AssetsByAddress[key] = append(r,
 			models.Asset{
